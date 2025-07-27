@@ -1,4 +1,4 @@
-# SnapX Plugin Runtime (Experimental)
+# SnapX Plugin Runtime (Experimental, known as Drift)
 
 This project serves as an experimental JavaScript runtime designed for the SnapX application. It is used to evaluate and run plugin scripts written by the community, using modern JavaScript syntax and features.
 
@@ -31,6 +31,65 @@ All SnapX plugins must adhere to the following guidelines:
 - **Source Code**: A link to the plugin’s source code must be provided (preferably hosted on GitHub, GitLab, or Bitbucket)
 - All plugin code **must be bundled and transpiled** to **ECMAScript 2023** (or lower).
 - Your plugin **_MUST!!!_** be written in TypeScript in order to keep your sanity.
+
+## 🔐 Plugin Verification & Trust
+
+To ensure the safety and authenticity of plugins in SnapX, all plugins must be **cryptographically verifiable**.
+
+---
+
+### 📄 File Integrity & Signing Requirements
+
+Every plugin must meet the following criteria:
+
+- ✅ **Each file inside the plugin ZIP must:**
+    - Have a corresponding `.sha512` file (e.g. `main.js` → `main.js.sha512`).
+    - Have a detached `.asc` OpenPGP signature (e.g. `main.js` → `main.js.asc`) created using your trusted key.
+
+> ⚠️ This applies to **every single file** — not just the main files. Even metadata files or assets must be signed and hashed.
+
+---
+
+### ⚠️ What Happens Without Verification?
+
+If a plugin lacks proper signatures and checksums:
+
+**Users will see this warning:**
+
+⚠️ WARNING: This plugin is unsigned and may be unsafe. SnapX cannot verify who made it or if it was tampered with.
+Proceeding is NOT recommended unless you fully trust the source.
+
+> 🛑 **This is not like a typical unsigned executable warning you might see on Windows.**  
+> In SnapX, developers can **freely prove their identity** using cryptographic keys tied to platforms like GitHub, Keybase, Mailvelope, or email.  
+> If they haven’t taken this **basic verification step**, we strongly discourage trusting or installing their plugin — especially if it's distributed outside of official channels or our plugin registry.
+
+### 🧾 Ways to Reduce the Warning Severity
+
+The scary warning will become more **neutral** if:
+
+- The plugin is signed using a **Keybase** account that has proof of owning the OpenPGP Key.
+- The author's OpenPGP key is **published on Mailvelope’s keyserver** (https://keys.mailvelope.com).
+- The plugin follows all structural guidelines and hash signing expectations.
+
+The warning will look like this:
+
+> ℹ️ **This plugin is signed but the publisher’s identity is not fully verified.**  
+> The plugin is safe from tampering, but please only install it if you trust the source.
+
+### 🌐 Verified Publishers
+
+Developers can **upgrade to Verified Publisher** status by submitting their identity for review.
+
+- **One-time fee:** $20 USD
+- **Privacy-friendly:** We use a minimal and ethical identity verification method.
+- **Perks:**
+    - No warnings shown during plugin installation.
+    - A **checkmark badge** will appear next to the plugin and author name, signaling trustworthiness to users.
+    - Listed in the SnapX registry as a **Trusted Publisher**.
+    - Plugins are favored in search results and trending lists. (ranked by a scoring system that balances Verified status with user ratings, recent updates, and overall popularity to ensure fairness)
+    - Verified Publishers can formally contest and respond to reviews on their plugins, with contested reviews verified by moderators to ensure fairness.
+    - Given Trusted Publisher role in SnapX Discord server.
+    - Helps offset **infrastructure and administrative costs** to keep SnapX free and community-focused.
 
 ## Plugin Structure
 
@@ -69,6 +128,8 @@ Example manifest
     wiki: "https://github.com/BrycensRanch/SnapX/wiki",
     donate: "https://ko-fi.com/BrycensRanch"
   },
+  // Although discouraged, you are always able to restrict your plguin from loading on certain platforms.
+  // platforms: ["linux", "windows", "macos", "freebsd"],
   // Plugins rely on GPLv3 (or later) licensed code, so they must be licensed under GPL-3.0-or-later or a compatible license.
   // Recommended licenses are GPL-3.0-or-later, LGPL-3.0-or-later, or AGPL-3.0-or-later.
   
@@ -81,6 +142,7 @@ Example manifest
   source: "https://github.com/BrycensRanch/SnapX",
 
   // Localized descriptions - keys are BCP 47 language tags
+  // All description fields support Markdown.
   description: {
     en: "A simple Hello World plugin for SnapX.",
     es: "Un plugin Hola Mundo sencillo para SnapX.",
@@ -117,15 +179,88 @@ Example manifest
     // Its 512-bit output provides a large security margin against current and foreseeable quantum computing attacks.
     builderMachineIdSha512: "b109f3bbbc244eb82441917ed06d618b9008dd09b3befd1bde6d06cf5df74f6a3c8ae3b30a65812bb0db7357b7d158a104b8ff4b3f95d8ffaf02393e71e9ee97"
   },
-
-  // List of primary files included in the plugin ZIP archive (use POSIX-style forward slashes).
-  // These should be the core plugin files required for loading and execution.
-  // Do NOT include signature (.sig) or checksum (.sha512) files — those are handled automatically.
-  files: [
-    "main.js",
-    "metadata.json5",
-    "icon.png"
-  ]
+/*
+// Telemetry section describes what usage data the plugin may collect if telemetry is enabled.
+// If omitted, it is assumed the plugin does not collect any telemetry data.
+// IMPORTANT: If telemetry is disabled globally in SnapX, telemetry is disabled for all plugins automatically.
+// Additionally, users can disable telemetry individually for each plugin via SnapX settings.
+telemetry: {
+  description: "Collects anonymous usage data to improve plugin features.",
+  url: "https://snapx.org/privacy",
+  // The `level` field indicates the sensitivity of telemetry data:
+  // - "none": no telemetry collected.
+  // - "basic": anonymous usage stats only (e.g., feature usage counts, error rates).
+  // - "detailed": collects more comprehensive diagnostic and environment information,
+  //    such as OS version, SnapX version, plugin configuration settings, performance metrics,
+  //    and anonymized hardware details.
+  //    This data helps developers diagnose issues and improve plugin compatibility,
+  //    but it does NOT include personal user data or content.
+  // - "personal": may collect personal or identifiable information (heavily discouraged!).
+  level: "basic",
+  sellsData: false, // true if data is sold or shared. Automatically excludes you from the plugin registry.
+  salesDescription: "" // required if sellsData is true, describing what data is sold and to whom
+},
+*/
+  
+// List of primary files included in the plugin ZIP archive (use POSIX-style forward slashes).
+// These should be the core plugin files required for loading and execution.
+// Do NOT include signature (.sig) or checksum (.sha512) files — those are handled automatically.
+files: [
+  "main.js",
+  "metadata.json5",
+  "icon.png"
+],
+// Plugin type: "gui", "core", or other recognized roles
+type: "gui",
+// Plugins that must be loaded before this one
+loadBefore: [],
+// List of plugins that are incompatible with this one
+incompatibleWith: ["legacy-annotator"],
+hooks: {
+  onAppStart: {
+    handlers: ["initAnalytics"],
+    explanation: "Initialize analytics and cache plugin data when the app starts."
+  },
+  beforeUpload: {
+    handlers: ["resizeImage", "addWatermark"],
+    explanation: "Optimize image size and apply watermark before uploading."
+  },
+  onUploadComplete: {
+    handlers: ["notifyUser"],
+    explanation: "Notify user and copy the uploaded image URL to clipboard."
+  }
+},
+// Declares what settings this plugin contributes to which config structures
+configExtensions: [
+  {
+    target: "ApplicationConfig",
+    settings: [
+      {
+        name: "advancedAnnotation",
+        type: "boolean",
+        default: false,
+        description: "Enables enhanced annotation tools in the editor."
+      },
+      {
+        name: "cloudBackup",
+        type: "string",
+        default: "https://backup.snapx.org",
+        description: "Optional endpoint to back up plugin data."
+      }
+    ]
+  },
+  {
+    target: "UploadersConfig",
+    settings: [
+      {
+        name: "autoWatermark",
+        type: "boolean",
+        default: true,
+        description: "Automatically apply watermark to uploads."
+      }
+    ]
+  }
+]
 }
 ```
 
