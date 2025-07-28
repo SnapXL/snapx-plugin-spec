@@ -213,7 +213,11 @@ files: [
 // Plugin type: "gui", "core", or other recognized roles
 type: "gui",
 // Plugins that must be loaded before this one
-loadBefore: [],
+loadBefore: [], 
+// Plugins that your plugin depends on.
+// By declaring a dependency, you force the depended plugin to run in the same JS engine as yours. 
+// As opposed to it being isolated by default.
+dependsOn: [],
 // List of plugins that are incompatible with this one
 incompatibleWith: ["legacy-annotator"],
 hooks: {
