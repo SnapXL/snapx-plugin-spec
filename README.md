@@ -1,4 +1,4 @@
-# SnapX Plugin Runtime (Experimental, known as Drift)
+# SnapX Plugin Runtime (Experimental, known as Snappy)
 
 This project serves as an experimental JavaScript runtime designed for the SnapX application. It is used to evaluate and run plugin scripts written by the community, using modern JavaScript syntax and features.
 
