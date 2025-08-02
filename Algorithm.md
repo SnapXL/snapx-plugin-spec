@@ -1,4 +1,4 @@
-# 🏰 Building the LEGO Castle: How the Helpfulness Score Works
+# 🏰 How the Trust Score Works
 
 Imagine you're building a super cool LEGO castle with your friends. This algorithm is like a special scoreboard that figures out who's helping the most and how important their help is.
 

@@ -14,23 +14,24 @@ It should support:
 - ECMAScript 2023 features (e.g., `findLast`, `toSorted`, `Array.prototype.with`, error cause propagation)
 - Standard OOP coding with `import` statements across multiple files
 - While Jint supports sandboxing, it's unknown how I'd design it yet.
-- I hopefully want to make sure plugin behavior can be audited by end users.
+- I want to make sure end users can audit plugin behavior.
 
 ## Node.js Compatibility
 
 The goal is to implement a subset of the Node.js core APIs (such as `fs`, `path`, `process`, etc.) to allow bundled modules compiled with tools like Webpack, esbuild, or Rollup to work as expected. This means authors can use standard Node.js libraries as long as they are bundled for runtime execution.
 
 > ⚠️ Not all modules will be implemented, and some may be **polyfilled** or **stubbed**. Use common libraries that gracefully degrade if possible.
+> Native Node.js files such as .node binaries and arbitrary external code like .dll, .so, or .dylib files are not supported.
 
 
 ## Plugin Requirements
 
 All SnapX plugins must adhere to the following guidelines:
 
-- **License**: All plugins must be licensed under **GPL v3 or later**
+- **License**: All plugins must be licensed under **GPL v3 or later** compatible license
 - **Source Code**: A link to the plugin’s source code must be provided (preferably hosted on GitHub, GitLab, or Bitbucket)
 - All plugin code **must be bundled and transpiled** to **ECMAScript 2023** (or lower).
-- Your plugin **_MUST!!!_** be written in TypeScript in order to keep your sanity.
+- Your plugin **_MUST!!!_** be written in TypeScript to keep your sanity.
 
 ## 🔐 Plugin Verification & Trust
 
@@ -60,8 +61,11 @@ If a plugin lacks proper signatures and checksums:
 Proceeding is NOT recommended unless you fully trust the source.
 
 > 🛑 **This is not like a typical unsigned executable warning you might see on Windows.**  
-> In SnapX, developers can **freely prove their identity** using cryptographic keys tied to platforms like GitHub, Keybase, Mailvelope, or email.  
-> If they haven’t taken this **basic verification step**, we strongly discourage trusting or installing their plugin — especially if it's distributed outside of official channels or our plugin registry.
+> In SnapX,
+> developers can **without cost prove their identity** using cryptographic keys tied to platforms like GitHub,
+> Keybase, Mailvelope, or email.  
+> If they haven’t taken this **basic verification step**, we strongly discourage trusting or installing their plugin —
+> especially if it's distributed outside of official channels or our plugin registry.
 
 ### 🧾 Ways to Reduce the Warning Severity
 
@@ -81,14 +85,14 @@ The warning will look like this:
 Developers can **upgrade to Verified Publisher** status by submitting their identity for review.
 
 - **One-time fee:** $20 USD
-- **Privacy-friendly:** We use a minimal and ethical identity verification method.
+- **Privacy-friendly:** We use a minimal and ethical identity verification method. No IDs, no pictures of your face.
 - **Perks:**
     - No warnings shown during plugin installation.
     - A **checkmark badge** will appear next to the plugin and author name, signaling trustworthiness to users.
     - Listed in the SnapX registry as a **Trusted Publisher**.
     - Plugins are favored in search results and trending lists. (ranked by a scoring system that balances Verified status with user ratings, recent updates, and overall popularity to ensure fairness)
     - Verified Publishers can formally contest and respond to reviews on their plugins, with contested reviews verified by moderators to ensure fairness.
-    - Given Trusted Publisher role in SnapX Discord server.
+    - Given Trusted Plugin Publisher role in SnapX Discord server.
     - Helps offset **infrastructure and administrative costs** to keep SnapX free and community-focused.
 
 ## Plugin Structure
@@ -281,10 +285,10 @@ configExtensions: [
 
 ## 🔐 Auth-Based Identity (Planned)
 
-Plugin authors must log in with:
+Plugin authors can log in with:
 
 - ✅ GitHub
-- ✅ Discord
+- ✅ Keybase
 
 No passwords. All plugin uploads will be associated with a verifiable identity.
 
@@ -344,7 +348,7 @@ When SnapX is **built with an internet connection**, it will:
 Plugin authors may optionally sign plugin archives using a public/private keypair.
 
 - The plugin registry binds your **public key** to your plugin
-- SnapX will verify the signature at install time
+- SnapX will verify the signature at installation time
 - Prevents tampering and spoofed updates
 
 ---
@@ -365,6 +369,7 @@ To protect users, all uploaded plugins will be scanned for suspicious behavior p
 ## 👮 Moderation & Disputes
 
 - Community reports can flag plugins for review
+- Volunteers are accepted, providing there is not an obvious conflict of interest.
 - Plugin takedowns may occur in cases of impersonation, malware, or broken functionality
 - Plugin name disputes will be resolved based on first-claim or reservation ownership
 
