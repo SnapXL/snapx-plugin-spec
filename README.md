@@ -20,8 +20,9 @@ It should support:
 
 The goal is to implement a subset of the Node.js core APIs (such as `fs`, `path`, `process`, etc.) to allow bundled modules compiled with tools like Webpack, esbuild, or Rollup to work as expected. This means authors can use standard Node.js libraries as long as they are bundled for runtime execution.
 
-> ⚠️ Not all modules will be implemented, and some may be **polyfilled** or **stubbed**. Use common libraries that gracefully degrade if possible.
-> Native Node.js files such as .node binaries and arbitrary external code like .dll, .so, or .dylib files are not supported.
+> [!WARNING]
+> Not all modules will be implemented, and some may be **polyfilled** or **stubbed**. Use common libraries that gracefully degrade if possible.
+> Native Node.js files such as `.node` binaries and arbitrary external code like `.dll`, `.so`, or `.dylib` files are not supported.
 
 
 ## Plugin Requirements
@@ -47,7 +48,8 @@ Every plugin must meet the following criteria:
     - Have a corresponding `.sha512` file (e.g. `main.js` → `main.js.sha512`).
     - Have a detached `.asc` OpenPGP signature (e.g. `main.js` → `main.js.asc`) created using your trusted key.
 
-> ⚠️ This applies to **every single file** — not just the main files. Even metadata files or assets must be signed and hashed.
+> [!WARNING]
+> This applies to **every single file** — not just the main files. Even metadata files or assets must be signed and hashed.
 
 ---
 
@@ -57,8 +59,9 @@ If a plugin lacks proper signatures and checksums:
 
 **Users will see this warning:**
 
-⚠️ WARNING: This plugin is unsigned and may be unsafe. SnapX cannot verify who made it or if it was tampered with.
-Proceeding is NOT recommended unless you fully trust the source.
+> [!WARNING]
+> This plugin is unsigned and may be unsafe. SnapX cannot verify who made it or if it was tampered with. \
+> Proceeding is NOT recommended unless you fully trust the source.
 
 > 🛑 **This is not like a typical unsigned executable warning you might see on Windows.**  
 > In SnapX,
@@ -77,7 +80,8 @@ The scary warning will become more **neutral** if:
 
 The warning will look like this:
 
-> ℹ️ **This plugin is signed but the publisher’s identity is not fully verified.**  
+> [!NOTE]
+> **This plugin is signed but the publisher’s identity is not fully verified.**  
 > The plugin is safe from tampering, but please only install it if you trust the source.
 
 ### 🌐 Verified Publishers
@@ -307,9 +311,9 @@ A central registry will serve as the **source of truth** for plugin metadata and
 
 ## 📛 Plugin Naming Rules (Proposed)
 
-| Name Type | Rule                                               |
-|-----------|----------------------------------------------------|
-| Global Name | Must be unique (e.g., `awesome-ocr`)               |
+| Name Type       | Rule                                               |
+|-----------------|----------------------------------------------------|
+| Global Name     | Must be unique (e.g., `awesome-ocr`)               |
 | Namespaced Name | Always allowed (e.g., `@BrycensRanch/awesome-ocr`) |
 
 ---
@@ -339,7 +343,8 @@ When SnapX is **built with an internet connection**, it will:
 - Download and embed a **snapshot of the plugin registry** into the build
 - This cached manifest enables **offline plugin browsing**, including names, authors, descriptions, and download URLs
 
-> If our servers go offline, SnapX users can still discover and install plugins that are hosted elsewhere — like GitHub — as long as they’re listed in the last cached manifest.
+> [!NOTE]
+>  If our servers go offline, SnapX users can still discover and install plugins that are hosted elsewhere — like GitHub — as long as they’re listed in the last cached manifest.
 
 ---
 
@@ -362,6 +367,7 @@ To protect users, all uploaded plugins will be scanned for suspicious behavior p
 - ❗ Extrapolated strings or suspicious escape sequences
 - ❗ Known malicious payloads or telemetry abuse
 
+> [!NOTE]
 > Suspicious plugins may be blocked or flagged for review before being listed in the registry.
 
 ---
@@ -369,7 +375,7 @@ To protect users, all uploaded plugins will be scanned for suspicious behavior p
 ## 👮 Moderation & Disputes
 
 - Community reports can flag plugins for review
-- Volunteers are accepted, providing there is not an obvious conflict of interest.
+- Volunteers are accepted, providing there is not an obvious conflict of interest
 - Plugin takedowns may occur in cases of impersonation, malware, or broken functionality
 - Plugin name disputes will be resolved based on first-claim or reservation ownership
 
@@ -382,6 +388,6 @@ This is a **design experiment** — not a production service (yet). Everything h
 
 ## 💬 Feedback Welcome
 
-Got thoughts or want to help shape this system? Open an issue or chat with us on Discord.
+Got thoughts or want to help shape this system? Open an issue or chat with us on [Discord](https://discord.gg/ys3ZCzttVQ)!
 
 We’re building SnapX to be **open, secure, and community-first.**
